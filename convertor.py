@@ -55,18 +55,33 @@ with open('train/src/notebook/jupiter_notebook.ipynb') as f:
                         res = res + cell.source + "\n"
                         res = res + row1 + "\n"
                         res = res + row2 + "\n"
-            elif cell.source.find('#test_dataset=') > 0:
+            elif cell.source.find('#test_dataset=') > 0 and cell.source.find('#test_classes=') > 0 and cell.source.find(
+                    '#train_dataset=') > 0 and cell.source.find('#train_classes=') > 0:
                 rows = cell.source.split('\n')
                 for row in rows:
                     arr = row.split('=')
+                    # print(arr)
                     if arr[0] == '#test_dataset':
                         test_dataset = arr[1]
                         print('test_dataset = ' + test_dataset)
-                        # row1 = "filename = 'predict/data/" + model_name + ".pkl'\n"
-                        # row2 = "pickle.dump(" + model_name + ", open(filename, 'wb'))\n"
-                        # res = res + cell.source + "\n"
-                        # res = res + row1 + "\n"
-                        # res = res + row2 + "\n"
+                        row1 = test_dataset + ".to_csv('predict/data/test_dataset.csv')\n"
+                    elif arr[0] == '#test_classes':
+                        test_classes = arr[1]
+                        print('test_classes = ' + test_classes)
+                        row2 = test_classes + ".to_csv('predict/data/test_classes.csv')\n"
+                    elif arr[0] == '#train_classes':
+                        train_classes = arr[1]
+                        print('train_classes = ' + train_classes)
+                        row3 = train_classes + ".to_csv('train/data/train_classes.csv')\n"
+                    elif arr[0] == '#train_dataset':
+                        train_dataset = arr[1]
+                        print('train_dataset = ' + train_dataset)
+                        row4 = train_dataset + ".to_csv('train/data/train_dataset.csv')\n"
+                res = res + cell.source + "\n"
+                res = res + row1 + "\n"
+                res = res + row2 + "\n"
+                res = res + row3 + "\n"
+                res = res + row4 + "\n"
             elif cell.source.find('#dataset') > 0:
                 rows = cell.source.split('\n')
                 for row in rows:
@@ -81,8 +96,6 @@ with open('train/src/notebook/jupiter_notebook.ipynb') as f:
                 res = res + cell.source + "\n"
 with open('train/src/scripts/train.py', 'w') as f:
     f.write(res)
-
-
 
 log.info("All imported libs inserted in requerements.txt")
 log.info("Train.py script prepared")
