@@ -17,6 +17,31 @@ python ingestor.py
 ```
 DS и JN расположены в "правильных" местах репозитория
 
+#### HoTo
+В среде Jupiter Notebook в файле ipynb необходимо сделать ряд пометок:
+
+1. тегом #dataset помечаем строку в ячейке, где осуществляется импорт датасета
+```
+wine = pd.read_csv('./../../data/historical_dataset.csv') #dataset
+```
+2. тегами
+```
+#test_dataset=X_test
+#test_classes=y_test
+#train_dataset=X_train
+#train_classes=y_train
+```
+создаются указатели на переменные с наборами данных для обучения модели и ее тестирования
+
+3. тегами 
+
+```
+#model=sgd
+```
+создаются указатели на переменные с обученными моделями
+
+!все указатели должны находиться в тех ячейках, где происходит инициализациия необходимых переменных
+
 ### 2. Конвертация JN в py скрипты
 на входе имеем полученные ранее DS и JN
 
@@ -38,3 +63,16 @@ pip install -r 'train/src/scripts/requirements.txt'
 ```
 python train/src/scripts/train.py
 ```
+
+### 4. Использование модели
+пререквизиты для использования )
+```
+pip install -r 'predict/src/scripts/requirements.txt'
+```
+
+запускаем модуль predict
+
+```
+python predict/src/scripts/predict.py
+```
+
