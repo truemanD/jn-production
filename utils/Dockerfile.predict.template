@@ -1,0 +1,13 @@
+FROM python:3.8.3-slim
+WORKDIR /scripts
+COPY predict/src/api/requirements.txt requirements.txt
+RUN apt-get update \
+    && apt-get -y install cron \
+    && apt-get -y install libpq-dev gcc \
+    && python -m pip install -r requirements.txt
+
+COPY ./predict ./predict
+
+CMD [ "./run.sh" ]
+EXPOSE 5000:<<port>>
+#ENTRYPOINT /bin/bash

@@ -6,7 +6,7 @@ pip install -r 'requirements.txt'
 на входе задаем в config.ini откуда брать JN и DS
 ```
 [ingestor]
-repo_name = https://raw.githubusercontent.com/...
+repo_name = https://raw.githubusercontent.com/truemanD/ML_test/main/
 ds_name = historical_dataset.csv
 jn_name = jupiter_notebook.ipynb
 ```
@@ -46,7 +46,9 @@ wine = pd.read_csv('./../../data/historical_dataset.csv') #dataset
 на входе имеем полученные ранее DS и JN. Pадаем в config.ini откуда брать JN и DS
 ```
 [convertor]
+api_template = api.template
 jn_name = jupiter_notebook.ipynb
+start_port = 5000
 ```
 
 запускаем модуль convertor
@@ -54,7 +56,7 @@ jn_name = jupiter_notebook.ipynb
 python convertor.py
 ```
 
-### 3. Обучение модели
+### 3. Локальное обучение модели
 на входе имеем сгенерированный файл train.py и данные для обучения модели в директории train/data
 
 пререквизиты для обучения )
@@ -68,7 +70,7 @@ pip install -r 'train/src/scripts/requirements.txt'
 python train/src/scripts/train.py
 ```
 
-### 4. Использование модели
+### 4. Локальное использование модели
 пререквизиты для использования )
 ```
 pip install -r 'predict/src/scripts/requirements.txt'

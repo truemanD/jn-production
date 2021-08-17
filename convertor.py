@@ -13,6 +13,14 @@ config_file = 'config.ini'
 config = configparser.ConfigParser()
 config.read(config_file)
 
+# clean models
+def config_clean_models():
+    config.remove_section('models')
+    with open(config_file, 'w') as configfile:
+        config.write(configfile)
+    config.add_section('models')
+    with open(config_file, 'w') as configfile:
+        config.write(configfile)
 
 # prepare requirement for predict api
 def reqs_predict_api():
@@ -112,7 +120,7 @@ def train():
                         predict(model_name)
                         predict_api(model_name, port)
                         port = int(port) + 1
-                        config_generator(model_name)
+                        config_models_generator(model_name)
             elif cell.source.find('#test_dataset=') > 0 and cell.source.find('#test_classes=') > 0 and cell.source.find(
                     '#train_dataset=') > 0 and cell.source.find('#train_classes=') > 0:
                 rows = cell.source.split('\n')
@@ -155,14 +163,15 @@ def train():
 
     log.info('train/src/scripts/train.py prepared')
 
-
-def config_generator(model_name):
+# setting models in config
+def config_models_generator(model_name):
     config.set('models', model_name, model_name)
     with open(config_file, 'w') as configfile:
         config.write(configfile)
 
 
 def main():
+    config_clean_models()
     reqs_predict()
     reqs_predict_api()
     reqs_train()
