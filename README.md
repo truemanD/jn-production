@@ -8,7 +8,7 @@ pip install -r 'requirements.txt'
 [ingestor]
 repo_name = https://raw.githubusercontent.com/...
 ds_name = historical_dataset.csv
-nb_name = jupiter_notebook.ipynb
+jn_name = jupiter_notebook.ipynb
 ```
 запускаем модуль ingestor
 
@@ -43,7 +43,11 @@ wine = pd.read_csv('./../../data/historical_dataset.csv') #dataset
 !все указатели должны находиться в тех ячейках, где происходит инициализациия необходимых переменных
 
 ### 2. Конвертация JN в py скрипты
-на входе имеем полученные ранее DS и JN
+на входе имеем полученные ранее DS и JN. Pадаем в config.ini откуда брать JN и DS
+```
+[convertor]
+jn_name = jupiter_notebook.ipynb
+```
 
 запускаем модуль convertor
 ```bash
@@ -75,4 +79,12 @@ pip install -r 'predict/src/scripts/requirements.txt'
 ```
 python predict/src/scripts/predict.py
 ```
+
+### 5. Генерация сценария расчета(DAG) и политик доступа(REGO)
+
+### 6. Сборка модуля обучения и модуля использования модели
+
+
+
+
 

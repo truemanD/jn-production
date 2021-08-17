@@ -1,0 +1,25 @@
+from datetime import timedelta
+from airflow import DAG
+from airflow.operators.bash import BashOperator
+from airflow.utils.dates import days_ago
+
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5)
+}
+with DAG(
+    '<<model_name>>',
+    default_args={'owner': 'airflow'},
+    description='A model <<model_name>> DAG',
+    start_date=days_ago(1),
+    schedule_interval=None,
+    tags=['<<model_name>>'],
+) as dag:
+    t1 = BashOperator(
+        task_id='launch_<<model_name>>',
+        bash_command='python predict/src/api/<<model_name>>.py',
+    )
+
+    t1
