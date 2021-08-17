@@ -21,6 +21,6 @@ def predict():
     return ('No model here to use')
 
 if __name__ == '__main__':
-    port = 5001
-    model = pickle.load(open('predict/data/sgd.pkl', 'rb'))
+    port = <<port>>
+    model = pickle.load(open('predict/data/<<model_name>>.pkl', 'rb'))
     app.run(port=port, debug=True)

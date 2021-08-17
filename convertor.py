@@ -12,11 +12,19 @@ log = logging.getLogger(__name__)
 config_file = 'config.ini'
 config = configparser.ConfigParser()
 config.read(config_file)
-# models:set = {""}
+
+
+# prepare requirement for predict api
+def reqs_predict_api():
+    res = "pickle4\nflask\npandas"
+    with open('predict/src/api/requirements.txt', 'w') as f:
+        f.write(res)
+    log.info("predict/src/api/requirements.txt prepared")
+
 
 # prepare requirement for predict
 def reqs_predict():
-    res = "pickle4\nflask\npandas"
+    res = "pickle4"
     with open('predict/src/scripts/requirements.txt', 'w') as f:
         f.write(res)
     log.info("predict/src/scripts/requirements.txt prepared")
@@ -66,31 +74,11 @@ def predict(model_name):
 
 
 # convert JN to python for predict_api
-def predict_api(model_name):
-    res = "import pickle\n" \
-          + "from flask import Flask, request, jsonify\n" \
-          + "import traceback\n" \
-          + "import pandas as pd\n" \
-          + "app = Flask(__name__)\n" \
-          + "@app.route('/predict', methods=['POST'])\n" \
-          + "def predict():\n" \
-          + "\tif model:\n" \
-          + "\t\ttry:\n" \
-          + "\t\t\tjson_ = request.json\n" \
-          + "\t\t\tprint(json_)\n" \
-          + "\t\t\tquery = pd.DataFrame(json_, index=[0])\n" \
-          + "\t\t\tprediction = list(model.predict(query))\n" \
-          + "\t\t\treturn jsonify({'prediction': str(prediction)})\n" \
-          + "\t\texcept:\n" \
-          + "\t\t\treturn jsonify({'trace': traceback.format_exc()})\n" \
-          + "\telse:\n" \
-          + "\t\tprint('Train the model first')\n" \
-          + "\t\treturn ('No model here to use')\n" \
-          + "if __name__ == '__main__':\n" \
-          + "\tport = 12345\n" \
-          + "\tmodel = pickle.load(open('predict/data/" + model_name + ".pkl', 'rb'))\n" \
-          + "\tapp.run(port=port, debug=True)\n"
-
+def predict_api(model_name, port):
+    with open('utils/' + config['convertor']['api_template'], 'r') as f:
+        res = f.read()
+        res = res.replace('<<model_name>>', model_name)
+        res = res.replace('<<port>>', str(port))
     with open('predict/src/api/' + model_name + '.py', 'w') as f:
         f.write(res)
 
@@ -99,6 +87,7 @@ def predict_api(model_name):
 
 # convert JN to python for train
 def train():
+    port = int(config['convertor']['start_port'])
     res = "import pickle\n"
     with open('train/src/notebook/' + config['convertor']['jn_name']) as f:
         nb = nbformat.read(f, as_version=4)
@@ -121,7 +110,8 @@ def train():
                         res = res + row1 + "\n"
                         res = res + row2 + "\n"
                         predict(model_name)
-                        predict_api(model_name)
+                        predict_api(model_name, port)
+                        port = int(port) + 1
                         config_generator(model_name)
             elif cell.source.find('#test_dataset=') > 0 and cell.source.find('#test_classes=') > 0 and cell.source.find(
                     '#train_dataset=') > 0 and cell.source.find('#train_classes=') > 0:
@@ -174,6 +164,7 @@ def config_generator(model_name):
 
 def main():
     reqs_predict()
+    reqs_predict_api()
     reqs_train()
     train()
 

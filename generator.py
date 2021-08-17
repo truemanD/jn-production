@@ -11,19 +11,14 @@ config = configparser.ConfigParser()
 config.read(config_file)
 
 models = dict(config['models'].items())
-# print(type(models))
-# print(models)
 
 res = ''
 for model_name in models:
-    with open('utils/DAG.template', 'r') as f:
+    with open('utils/' + config['generator']['dag_template'], 'r') as f:
         res = f.read()
-        # print(res)
         res = res.replace('<<model_name>>', model_name)
-        # print(res)
     with open('predict/razum/' + model_name + '.py', 'w') as f:
         f.write(res)
-
 
 log.info("All thing genarated")
 tend = datetime.now()
