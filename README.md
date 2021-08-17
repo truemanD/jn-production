@@ -77,7 +77,18 @@ pip install -r 'predict/src/scripts/requirements.txt'
 запускаем модуль predict
 
 ```
-python predict/src/scripts/predict.py
+python predict/src/scripts/<<model_name>>_predict.py
+
+```
+пререквизиты для использования api)
+```
+pip install -r 'predict/src/api/requirements.txt'
+```
+
+запускаем модуль predict с api
+
+```
+python predict/src/api/<<model_name>>.py
 ```
 
 ### 5. Генерация сценария расчета(DAG) и политик доступа(REGO)
