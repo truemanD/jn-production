@@ -1,0 +1,10 @@
+pickle4
+pandas
+seaborn
+matplotlib
+sklearn
+sklearn
+sklearn
+sklearn
+sklearn
+sklearn
