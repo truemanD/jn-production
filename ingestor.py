@@ -40,7 +40,8 @@ ds_url = repo_url + ds_name
 r = requests.get(ds_url, allow_redirects=True)
 
 dir = 'train/data/'
-os.mkdir(dir)
+if not os.path.exists(dir):
+    os.mkdir(dir)
 
 with open('train/data/' + ds_name, 'w') as f:
     f.write(r.text)

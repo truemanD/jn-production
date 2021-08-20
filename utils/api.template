@@ -13,7 +13,7 @@ def predict():
             print(json_)
             query = pd.DataFrame(json_, index=[0])
             prediction = list(model.predict(query))
-            return jsonify({'prediction': str(prediction)})
+            return jsonify({'should buy': str(prediction).replace('0','never').replace('1','yep')})
         except:
             return jsonify({'trace': traceback.format_exc()})
     else:
