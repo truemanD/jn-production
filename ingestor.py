@@ -37,6 +37,6 @@ config.set('convertor', 'jn_name', jn_name)
 with open(config_file, 'w') as configfile:
     config.write(configfile)
 
-log.info("All thing imported")
+log.info("All things imported")
 tend = datetime.now()
 log.info('Total execute time ' + (tend - tstart).__str__())

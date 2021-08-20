@@ -48,6 +48,6 @@ with open('predict/docker/Dockerfile', 'w') as f:
     f.write(res)
 
 
-log.info("All thing genarated")
+log.info("All things generated")
 tend = datetime.now()
 log.info('Total execute time ' + (tend - tstart).__str__())

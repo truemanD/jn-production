@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 
 
-log.info("All thing built")
+log.info("All things built")
 tend = datetime.now()
 log.info('Total execute time ' + (tend - tstart).__str__())
 

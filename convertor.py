@@ -1,4 +1,6 @@
+import os
 import pickle
+import stat
 from datetime import datetime
 
 import nbformat
@@ -13,6 +15,7 @@ config_file = 'config.ini'
 config = configparser.ConfigParser()
 config.read(config_file)
 
+
 # clean models
 def config_clean_models():
     config.remove_section('models')
@@ -22,20 +25,27 @@ def config_clean_models():
     with open(config_file, 'w') as configfile:
         config.write(configfile)
 
+
 # prepare requirement for predict api
 def reqs_predict_api():
     res = "pickle4\nflask\npandas"
-    with open('predict/src/api/requirements.txt', 'w') as f:
+    filename = 'predict/src/api/requirements.txt'
+    with open(filename, 'w') as f:
         f.write(res)
-    log.info("predict/src/api/requirements.txt prepared")
+        st = os.stat(filename)
+        os.chmod(filename, st.st_mode | stat.S_IEXEC)
+    log.info(filename + ' prepared')
 
 
 # prepare requirement for predict
 def reqs_predict():
     res = "pickle4"
-    with open('predict/src/scripts/requirements.txt', 'w') as f:
+    filename = 'predict/src/scripts/requirements.txt'
+    with open(filename, 'w') as f:
         f.write(res)
-    log.info("predict/src/scripts/requirements.txt prepared")
+        st = os.stat(filename)
+        os.chmod(filename, st.st_mode | stat.S_IEXEC)
+    log.info(filename + ' prepared')
 
 
 # prepare requirements.txt for train
@@ -58,11 +68,13 @@ def reqs_train():
                             if words[0] == "from":
                                 lib = words[1].split(".")
                                 res = res + lib[0] + "\n"
-
-    with open('train/src/scripts/requirements.txt', 'w') as f:
+    filename = 'train/src/scripts/requirements.txt'
+    with open(filename, 'w') as f:
         f.write(res)
+        st = os.stat(filename)
+        os.chmod(filename, st.st_mode | stat.S_IEXEC)
 
-    log.info('train/src/scripts/requirements.txt prepared')
+    log.info(filename + ' prepared')
 
 
 # convert JN to python for predict
@@ -75,10 +87,13 @@ def predict(model_name):
           + "result = " + model_name + ".score(X_test, y_test)\n" \
           + "print('model score:', result)\n"
 
-    with open('predict/src/scripts/' + model_name + '_predict.py', 'w') as f:
+    filename = 'predict/src/scripts/' + model_name + '_predict.py'
+    with open(filename, 'w') as f:
+        st = os.stat(filename)
         f.write(res)
+        os.chmod(filename, st.st_mode | stat.S_IEXEC)
 
-    log.info('predict/src/scripts/' + model_name + '_predict.py prepared')
+    log.info(filename + ' prepared')
 
 
 # convert JN to python for predict_api
@@ -87,10 +102,13 @@ def predict_api(model_name, port):
         res = f.read()
         res = res.replace('<<model_name>>', model_name)
         res = res.replace('<<port>>', str(port))
-    with open('predict/src/api/' + model_name + '.py', 'w') as f:
+    filename = 'predict/src/api/' + model_name + '.py'
+    with open(filename, 'w') as f:
         f.write(res)
+        st = os.stat(filename)
+        os.chmod(filename, st.st_mode | stat.S_IEXEC)
 
-    log.info('predict/src/api/' + model_name + '.py prepared')
+    log.info(filename + ' prepared')
 
 
 # convert JN to python for train
@@ -158,10 +176,14 @@ def train():
                         res = res + row1 + "\n"
             else:
                 res = res + cell.source + "\n"
-    with open('train/src/scripts/train.py', 'w') as f:
+    filename = 'train/src/scripts/train.py'
+    with open(filename, 'w') as f:
         f.write(res)
+        st = os.stat(filename)
+        os.chmod(filename, st.st_mode | stat.S_IEXEC)
 
-    log.info('train/src/scripts/train.py prepared')
+    log.info(filename + ' prepared')
+
 
 # setting models in config
 def config_models_generator(model_name):
