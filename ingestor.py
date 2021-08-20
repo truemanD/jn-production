@@ -27,7 +27,13 @@ jn_name = config['ingestor']['jn_name']
 nb_url = repo_url + jn_name
 r = requests.get(nb_url, allow_redirects=True)
 
-dir = 'train/src/notebook/'
+dir = 'train'
+if not os.path.exists(dir):
+    os.mkdir(dir)
+dir = 'train/src'
+if not os.path.exists(dir):
+    os.mkdir(dir)
+dir = 'train/src/notebook'
 if not os.path.exists(dir):
     os.mkdir(dir)
 
@@ -39,6 +45,9 @@ ds_name = config['ingestor']['ds_name']
 ds_url = repo_url + ds_name
 r = requests.get(ds_url, allow_redirects=True)
 
+dir = 'train'
+if not os.path.exists(dir):
+    os.mkdir(dir)
 dir = 'train/data/'
 if not os.path.exists(dir):
     os.mkdir(dir)

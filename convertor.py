@@ -46,6 +46,12 @@ def reqs_predict_api():
 # prepare requirement for predict
 def reqs_predict():
     res = "pickle4"
+    dir = 'predict'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+    dir = 'predict/src'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
     dir = 'predict/src/scripts/'
     if not os.path.exists(dir):
         os.mkdir(dir)
@@ -78,6 +84,12 @@ def reqs_train():
                                 lib = words[1].split(".")
                                 res = res + lib[0] + "\n"
 
+    dir = 'train'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+    dir = 'train/src'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
     dir = 'train/src/scripts/'
     if not os.path.exists(dir):
         os.mkdir(dir)
@@ -101,6 +113,15 @@ def predict(model_name):
           + "result = " + model_name + ".score(X_test, y_test)\n" \
           + "print('model score:', result)\n"
 
+    dir = 'predict'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+    dir = 'predict/src'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+    dir = 'predict/data'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
     dir = 'predict/src/scripts/'
     if not os.path.exists(dir):
         os.mkdir(dir)
@@ -121,6 +142,12 @@ def predict_api(model_name, port):
         res = res.replace('<<model_name>>', model_name)
         res = res.replace('<<port>>', str(port))
 
+    dir = 'predict'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+    dir = 'predict/src'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
     dir = 'predict/src/api/'
     if not os.path.exists(dir):
         os.mkdir(dir)
@@ -200,6 +227,12 @@ def train():
             else:
                 res = res + cell.source + "\n"
 
+    dir = 'train'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+    dir = 'train/src'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
     dir = 'train/src/scripts/'
     if not os.path.exists(dir):
         os.mkdir(dir)
