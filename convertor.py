@@ -8,6 +8,9 @@ import logging
 import configparser
 
 tstart = datetime.now()
+dir = './logs'
+if not os.path.exists(dir):
+    os.mkdir(dir)
 log_file = 'logs/convertor_' + tstart.__str__() + '.log'
 logging.basicConfig(filename=log_file, filemode='w', format='%(levelname)s:%(message)s', level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -29,6 +32,9 @@ def config_clean_models():
 # prepare requirement for predict api
 def reqs_predict_api():
     res = "pickle4\nflask\npandas"
+    dir = 'predict/src/api/'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
     filename = 'predict/src/api/requirements.txt'
     with open(filename, 'w') as f:
         f.write(res)
@@ -40,6 +46,9 @@ def reqs_predict_api():
 # prepare requirement for predict
 def reqs_predict():
     res = "pickle4"
+    dir = 'predict/src/scripts/'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
     filename = 'predict/src/scripts/requirements.txt'
     with open(filename, 'w') as f:
         f.write(res)
@@ -68,6 +77,11 @@ def reqs_train():
                             if words[0] == "from":
                                 lib = words[1].split(".")
                                 res = res + lib[0] + "\n"
+
+    dir = 'train/src/scripts/'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+
     filename = 'train/src/scripts/requirements.txt'
     with open(filename, 'w') as f:
         f.write(res)
@@ -87,6 +101,10 @@ def predict(model_name):
           + "result = " + model_name + ".score(X_test, y_test)\n" \
           + "print('model score:', result)\n"
 
+    dir = 'predict/src/scripts/'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+
     filename = 'predict/src/scripts/' + model_name + '_predict.py'
     with open(filename, 'w') as f:
         st = os.stat(filename)
@@ -102,6 +120,11 @@ def predict_api(model_name, port):
         res = f.read()
         res = res.replace('<<model_name>>', model_name)
         res = res.replace('<<port>>', str(port))
+
+    dir = 'predict/src/api/'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+
     filename = 'predict/src/api/' + model_name + '.py'
     with open(filename, 'w') as f:
         f.write(res)
@@ -176,6 +199,11 @@ def train():
                         res = res + row1 + "\n"
             else:
                 res = res + cell.source + "\n"
+
+    dir = 'train/src/scripts/'
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+
     filename = 'train/src/scripts/train.py'
     with open(filename, 'w') as f:
         f.write(res)

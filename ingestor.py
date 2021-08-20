@@ -4,8 +4,13 @@ import nbformat
 import logging
 import requests
 import configparser
+import os
 
 tstart = datetime.now()
+dir = './logs'
+if not os.path.exists(dir):
+    os.mkdir(dir)
+
 log_file = './logs/ingestor_' + tstart.__str__() + '.log'
 
 logging.basicConfig(filename=log_file, filemode='w', format='%(levelname)s:%(message)s', level=logging.INFO)
@@ -22,6 +27,10 @@ jn_name = config['ingestor']['jn_name']
 nb_url = repo_url + jn_name
 r = requests.get(nb_url, allow_redirects=True)
 
+dir = 'train/src/notebook/'
+if not os.path.exists(dir):
+    os.mkdir(dir)
+
 with open('train/src/notebook/' + jn_name, 'w') as f:
     f.write(r.text)
 
@@ -29,6 +38,9 @@ ds_name = config['ingestor']['ds_name']
 
 ds_url = repo_url + ds_name
 r = requests.get(ds_url, allow_redirects=True)
+
+dir = 'train/data/'
+os.mkdir(dir)
 
 with open('train/data/' + ds_name, 'w') as f:
     f.write(r.text)
