@@ -14,42 +14,56 @@ config_file = 'config.ini'
 config = configparser.ConfigParser()
 config.read(config_file)
 
+dir = 'predict'
+if not os.path.exists(dir):
+    os.mkdir(dir)
+dir = 'predict/razum'
+if not os.path.exists(dir):
+    os.mkdir(dir)
+dir = 'predict/docker'
+if not os.path.exists(dir):
+    os.mkdir(dir)
+dir = 'train'
+if not os.path.exists(dir):
+    os.mkdir(dir)
+dir = 'train/razum'
+if not os.path.exists(dir):
+    os.mkdir(dir)
+dir = 'train/docker'
+if not os.path.exists(dir):
+    os.mkdir(dir)
+
 # create DAGs for predict models
 models = dict(config['models'].items())
-res = ''
+
 for model_name in models:
     with open('utils/' + config['generator']['dag_predict_template'], 'r') as f:
         res = f.read()
         res = res.replace('<<model_name>>', model_name)
-    with open('predict/razum/' + model_name + '.py', 'w') as f:
+    with open('predict/razum/predict_' + model_name + '.py', 'w') as f:
         f.write(res)
 
-# create DAG for train
-res = ''
-project_name = config['common']['project_name']
-with open('utils/' + config['generator']['dag_train_template'], 'r') as f:
-    res = f.read()
-    res = res.replace('<<project_name>>', project_name)
-with open('train/razum/train_' + project_name + '.py', 'w') as f:
-    f.write(res)
+    # create Dockerfile for predict
+    with open('utils/' + config['generator']['docker_predict_template'], 'r') as f:
+        res = f.read()
+        res = res.replace('<<model_name>>', model_name)
+    with open('predict/docker/Dockerfile.' + model_name, 'w') as f:
+        f.write(res)
 
-# create Dockerfile for train
-res = ''
-project_name = config['common']['project_name']
-with open('utils/' + config['generator']['docker_train_template'], 'r') as f:
-    res = f.read()
-    res = res.replace('<<project_name>>', project_name)
-with open('train/docker/Dockerfile', 'w') as f:
-    f.write(res)
 
-# create Dockerfile for predict
-res = ''
-project_name = config['common']['project_name']
-with open('utils/' + config['generator']['docker_predict_template'], 'r') as f:
-    res = f.read()
-    res = res.replace('<<project_name>>', project_name)
-with open('predict/docker/Dockerfile', 'w') as f:
-    f.write(res)
+    # create DAG for train
+    with open('utils/' + config['generator']['dag_train_template'], 'r') as f:
+        res = f.read()
+        res = res.replace('<<model_name>>', model_name)
+    with open('train/razum/train_' + model_name + '.py', 'w+') as f:
+        f.write(res)
+
+    # create Dockerfile for train
+    with open('utils/' + config['generator']['docker_predict_template'], 'r') as f:
+        res = f.read()
+        res = res.replace('<<model_name>>', model_name)
+    with open('train/docker/Dockerfile.' + model_name, 'w') as f:
+        f.write(res)
 
 
 log.info("All things generated")

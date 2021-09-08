@@ -10,15 +10,15 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 with DAG(
-    '<<project_name>>',
+    'train_<<model_name>>',
     default_args={'owner': 'airflow'},
-    description='A model <<project_name>> DAG',
+    description='Train for model <<model_name>> DAG',
     start_date=days_ago(1),
     schedule_interval=None,
-    tags=['<<project_name>>'],
+    tags=['<<model_name>>'],
 ) as dag:
     t1 = BashOperator(
-        task_id='launch_<<project_name>>',
+        task_id='launch_<<model_name>>',
         bash_command='python train/src/scripts/train.py',
     )
 

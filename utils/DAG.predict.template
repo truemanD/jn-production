@@ -10,9 +10,9 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 with DAG(
-    '<<model_name>>',
+    'predict_<<model_name>>',
     default_args={'owner': 'airflow'},
-    description='A model <<model_name>> DAG',
+    description='Predict model <<model_name>> DAG',
     start_date=days_ago(1),
     schedule_interval=None,
     tags=['<<model_name>>'],
